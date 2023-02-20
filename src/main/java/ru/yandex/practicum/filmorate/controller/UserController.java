@@ -27,9 +27,7 @@ public class UserController {
     private void validateUsers(@Valid User user) throws ValidationException {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
-        }
-        if (user.getBirthdate().isAfter(LocalDate.now())) {
-            throw new ValidationException("Дата рождения не может быть в будущем времени");
+
         }
         if (user.getLogin().contains(" ")) {
             throw new ValidationException("Логин не может содержать пробелы");
@@ -37,11 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public User create(@Valid @RequestBody User user) throws ValidationException {
-        if (users.containsKey(user.getId())) {
-            log.error("Добавлен существующий пользователь");
-            throw new ValidationException("Пользователь с id" + user.getId() + " уже зарегестрирова");
-        }
+    public User create(@Valid @RequestBody User user) {
         validateUsers(user);
         user.setId(users.size() + 1);
         log.info("Вы - {}!", "добавили нового пользователя");
@@ -50,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public User putUser(@Valid @RequestBody User user) throws ValidationException {
+    public User putUser(@Valid @RequestBody User user) {
         validateUsers(user);
         user.setId(users.size() + 1);
         log.info("Вы - {}!", " обновили данные для текущего фильма");

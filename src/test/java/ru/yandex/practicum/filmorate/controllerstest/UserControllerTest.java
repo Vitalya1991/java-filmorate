@@ -1,18 +1,18 @@
 package ru.yandex.practicum.filmorate.controllerstest;
 
-import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.yandex.practicum.filmorate.controller.FilmController;
-import ru.yandex.practicum.filmorate.controller.UserController;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import ru.yandex.practicum.filmorate.controller.FilmController;
+import ru.yandex.practicum.filmorate.controller.UserController;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -30,20 +30,20 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content()
-                        .json("[{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"name\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}]"));
+                        .json("[{\"birthday\":\"1980-05-13\",\"name\":\"name\",\"id\":1,\"login\":\"login\",\"email\":\"lol@mail.ru\"}]"));
     }
 
     @Test
     void putAllOk() throws Exception {
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/users")
-                                .content("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}")
+                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content()
-                        .json("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}"));
+                        .json("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}"));
     }
 
     @Test
@@ -70,13 +70,13 @@ public class UserControllerTest {
     void putEmptyName() throws Exception {
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/users")
-                                .content("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"\",\"birthday\":\"1980-05-13\"}")
+                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"\",\"birthday\":\"1980-05-13\"}")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content()
-                        .json("{\"id\"1,\"email\":\"dfg@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
+                        .json("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
     }
 
     @Test
@@ -93,13 +93,13 @@ public class UserControllerTest {
     void createAllOk() throws Exception {
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/users")
-                                .content("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"name\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}")
+                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"name\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content()
-                        .json("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"name\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
+                        .json("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"name\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
     }
 
     @Test
@@ -126,13 +126,13 @@ public class UserControllerTest {
     void createEmptyName() throws Exception {
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/users")
-                                .content("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"\",\"birthday\":\"1980-05-13\"}")
+                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"\",\"birthday\":\"1980-05-13\"}")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content()
-                        .json("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
+                        .json("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
     }
 
     @Test
