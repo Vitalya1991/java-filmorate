@@ -26,7 +26,7 @@ public class UserController {
 
     @PostMapping("/users")
     public User create(@Valid @RequestBody User user) {
-        UserValidator.validater(user);
+        userValidator.validater(user);
         log.info("Вы - {}!", "добавили нового пользователя");
         users.put(user.getId(), user);
         return user;
@@ -34,7 +34,7 @@ public class UserController {
 
     @PutMapping("/users")
     public User putUser(@Valid @RequestBody User user) {
-        UserValidator.validater(user);
+        userValidator.validater(user);
         log.info("Вы - {}!", " обновили данные для текущего фильма");
         users.put(user.getId(), user);
         return user;
