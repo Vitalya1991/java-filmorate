@@ -32,7 +32,7 @@ public class FilmController {
     @PostMapping ("/films")
     public Film create(@Valid @RequestBody Film film) throws ValidationException {
 
-        filmValidator.validate(film);
+        FilmValidator.validate(film);
         films.put(film.getId(), film);
         log.info("Вы - {}!", " обновили данные для нового фильма");
         return film;
@@ -41,7 +41,7 @@ public class FilmController {
     @PutMapping("/films")
     public Film putFilm(@Valid @RequestBody Film film) throws ValidationException {
 
-        filmValidator.validate(film);
+        FilmValidator.validate(film);
         film.setId(films.size() + 1);
         log.info("Вы - {}!", " обновили данные для текущего фильма");
         films.put(film.getId(), film);
