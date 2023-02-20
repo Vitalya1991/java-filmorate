@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.model.User;
 
 @UtilityClass
 public  class UserValidator {
-    public void validate (User user) {
+    public void validater(User user) {
         if(user.getName().isBlank()){
             user.setName(user.getLogin());
         }

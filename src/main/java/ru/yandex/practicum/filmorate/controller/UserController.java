@@ -16,7 +16,7 @@ import java.util.Map;
 @Getter
 public class UserController {
     private final Map<Integer, User> users = new HashMap<Integer, User>();
-    UserValidator userValidator;
+     UserValidator userValidator;
     @GetMapping("/users")
     public Collection<User> findAll() {
         log.info("Получен запрос на получение списка пользователей");
@@ -26,7 +26,7 @@ public class UserController {
 
     @PostMapping("/users")
     public User create(@Valid @RequestBody User user) {
-        UserValidator.validate(user);
+        UserValidator.validater(user);
         log.info("Вы - {}!", "добавили нового пользователя");
         users.put(user.getId(), user);
         return user;
@@ -34,7 +34,7 @@ public class UserController {
 
     @PutMapping("/users")
     public User putUser(@Valid @RequestBody User user) {
-        UserValidator.validate(user);
+        UserValidator.validater(user);
         log.info("Вы - {}!", " обновили данные для текущего фильма");
         users.put(user.getId(), user);
         return user;
