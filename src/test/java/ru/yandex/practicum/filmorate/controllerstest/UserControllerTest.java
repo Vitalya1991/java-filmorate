@@ -23,13 +23,13 @@ public class UserControllerTest {
 
     @Test
     void findAll() throws Exception {
-        userController.putUser(FilmUserTestData.user1);
+        userController.putUser(FilmUserTestData.user);
         mockMvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content()
-                        .json("[{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}]"));
+                        .json("[{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"name\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}]"));
     }
 
     @Test
@@ -92,13 +92,13 @@ public class UserControllerTest {
     void createAllOk() throws Exception {
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/users")
-                                .content("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}")
+                                .content("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"name\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content()
-                        .json("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}"));
+                        .json("{\"id\"1,\"email\":\"lol@mail.ru\",\"login\":\"name\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
     }
 
     @Test

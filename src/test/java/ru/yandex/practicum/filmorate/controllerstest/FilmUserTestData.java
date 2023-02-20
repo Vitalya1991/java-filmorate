@@ -10,15 +10,15 @@ import java.time.LocalDate;
 
 public class FilmUserTestData {
 
-    public static Film film1;
+    public static Film film;
 
     static {
         try {
-            film1 = new Film(1, "New film", "Some description", LocalDate.of(2020, 10, 13), Duration.ofMinutes(120));
+            film = new Film(1, "New film", "Some description", LocalDate.of(2020, 10, 13), Duration.ofMinutes(120));
         } catch (ValidationException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static User user1 = new User(1, "lol@mail.ru", "login", LocalDate.of(1980, 5, 13), "name");
+    public static User user = new User(1, "lol@mail.ru", "login", LocalDate.of(1980, 5, 13), "name");
 }

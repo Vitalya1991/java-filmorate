@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +13,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 
 @Data
-@Validated
+@AllArgsConstructor
 public class Film {
     @NotBlank(message = "Название фильма не должно быть пустым.")
     String name; // название
