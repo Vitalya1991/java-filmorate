@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validator.UserValidator;
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class UserController {
 
 
     @PostMapping
-    public User create(@RequestBody User user) {
+    public User create(@Valid @RequestBody User user) {
         userValidator.validater(user);
         user.setId(IdCount);
         IdCount++;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User putUser(@RequestBody User user) {
+    public User putUser(@Valid@RequestBody User user) {
         userValidator.validater(user);
         log.info("Вы - {}!", " обновили данные для текущего фильма");
         users.put(user.getId(), user);
