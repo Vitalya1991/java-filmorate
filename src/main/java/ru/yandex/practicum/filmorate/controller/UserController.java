@@ -6,19 +6,19 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validator.UserValidator;
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 @RequestMapping("/users")
 @RestController
 @Slf4j
 @Getter
 public class UserController {
-    private final Map<Integer, User> users = new HashMap<>();
-     UserValidator userValidator;
+    private final HashMap<Integer, User> users = new HashMap<>();
+    UserValidator userValidatior;
+    private int id = 1;
 
     @GetMapping
-    public Collection<User> findAll() {
+    public Collection<User> getAll() {
         log.info("Получен запрос на получение списка пользователей");
         return users.values();
     }
@@ -26,16 +26,21 @@ public class UserController {
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        userValidator.validate(user);
+        userValidatior.validate(user);
+        if (user.getName().isEmpty()) {
+            user.setName(user.getLogin());
+        }
         log.info("Вы - {}!", "добавили нового пользователя");
+        user.setId(id);
         users.put(user.getId(), user);
+        id++;
         return user;
     }
 
     @PutMapping
-    public User putUser(@Valid@RequestBody User user) {
-        userValidator.validate(user);
-        log.info("Вы - {}!", " обновили данные для текущего фильма");
+    public User put(@Valid @RequestBody User user) {
+        userValidatior.validate(user);
+        log.info("Вы - {}!", " обновили данные для текущего пользователя");
         users.put(user.getId(), user);
         return user;
     }

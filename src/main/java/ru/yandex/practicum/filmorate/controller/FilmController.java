@@ -19,7 +19,7 @@ public class FilmController {
     private final Map<Integer, Film> films = new HashMap<>();
 
     FilmValidator filmValidator;
-
+    private int id = 1;
     @GetMapping
     public Collection<Film> findAll() {
         log.info("Получен запрос на получение списка фильмов");
@@ -31,7 +31,9 @@ public class FilmController {
     @PostMapping
     public Film create(@Valid @RequestBody Film film) {
         filmValidator.validate(film);
+        film.setId(id);
         films.put(film.getId(), film);
+        id++;
         log.info("Вы - {}!", " обновили данные для нового фильма");
         return film;
     }

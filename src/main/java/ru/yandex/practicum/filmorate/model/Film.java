@@ -18,9 +18,7 @@ public class Film {
     @Size(max = 200)
     private  String description;
 
-
     private LocalDate releaseDate;
-
 
     private Duration duration;
 
