@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 
 @RestControllerAdvice
 
-public class ValidationAdvince {
+public class ValidationAdvince extends Throwable {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
     public String validationException(){

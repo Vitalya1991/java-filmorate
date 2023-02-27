@@ -18,7 +18,12 @@ import java.util.Map;
 public class FilmController {
     private final Map<Integer, Film> films = new HashMap<>();
 
-    FilmValidator filmValidator;
+    final FilmValidator filmValidator;
+    private int id = 1;
+
+    public FilmController(FilmValidator filmValidator) {
+        this.filmValidator = filmValidator;
+    }
 
     @GetMapping
     public Collection<Film> findAll() {
@@ -31,6 +36,10 @@ public class FilmController {
     @PostMapping
     public Film create(@Valid @RequestBody Film film) {
         filmValidator.validate(film);
+        if (film.getDuration() <= 0){throw new ValidationAdvince();
+        }
+        film.setId(id);
+        id++;
         films.put(film.getId(), film);
         log.info("Вы - {}!", " обновили данные для нового фильма");
         return film;
@@ -40,6 +49,8 @@ public class FilmController {
     @PutMapping
     public Film putFilm(@Valid @RequestBody Film film){
         filmValidator.validate(film);
+        if (!films.containsKey(film.getId())){throw new ValidationAdvince();
+        }
         log.info("Вы - {}!", " обновили данные для текущего фильма");
         films.put(film.getId(), film);
         return film;
