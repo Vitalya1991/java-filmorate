@@ -41,6 +41,7 @@ public class FilmController {
         film.setId(id);
         id++;
         films.put(film.getId(), film);
+        id++;
         log.info("Вы - {}!", " обновили данные для нового фильма");
         return film;
     }
