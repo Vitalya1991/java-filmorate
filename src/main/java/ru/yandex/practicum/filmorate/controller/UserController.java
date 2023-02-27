@@ -45,7 +45,7 @@ public class UserController {
     @PutMapping
     public User put(@Valid @RequestBody User user) {
         userValidatior.validate(user);
-        if(users.containsKey(user.getId())){throw new ValidationAdvince();
+        if(!users.containsKey(user.getId())){throw new ValidationAdvince();
         }
         log.info("Вы - {}!", " обновили данные для текущего пользователя");
         users.put(user.getId(), user);

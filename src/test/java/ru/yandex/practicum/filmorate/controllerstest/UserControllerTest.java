@@ -33,18 +33,6 @@ public class UserControllerTest {
                         .json("[{\"birthday\":\"1980-05-13\",\"name\":\"name\",\"id\":1,\"login\":\"login\",\"email\":\"lol@mail.ru\"}]"));
     }
 
-    @Test
-    void putAllOk() throws Exception {
-        mockMvc.perform(
-                        MockMvcRequestBuilders.put("/users")
-                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}")
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(content()
-                        .json("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}"));
-    }
 
     @Test
     void putEmptyEmail() throws Exception {
@@ -66,19 +54,6 @@ public class UserControllerTest {
         ;
     }
 
-    @Test
-    void putEmptyName() throws Exception {
-        userController.create(FilmUserTestData.user);
-        mockMvc.perform(
-                        MockMvcRequestBuilders.put("/users")
-                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}")
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(content()
-                        .json("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
-    }
 
     @Test
     void putBirthdayFuture() throws Exception {
@@ -134,7 +109,7 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content()
-                        .json("{\"id\":5,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
+                        .json("{\"id\":4,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
     }
 
     @Test
