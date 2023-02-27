@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
@@ -24,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping
-    public Collection<User> findAll() {
+    public Collection<User> getAll() {
         log.info("Получен запрос на получение списка пользователей");
         return users.values();
     }
@@ -40,10 +41,11 @@ public class UserController {
         return user;
     }
 
+ @SneakyThrows
     @PutMapping
-    public User put(@Valid @RequestBody User user) throws ValidationAdvince {
+    public User put(@Valid @RequestBody User user) {
         userValidatior.validate(user);
-        if (!users.containsKey(user.getId())){throw new ValidationAdvince();
+        if(!users.containsKey(user.getId())){throw new ValidationAdvince();
         }
         log.info("Вы - {}!", " обновили данные для текущего пользователя");
         users.put(user.getId(), user);

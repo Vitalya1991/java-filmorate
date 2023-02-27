@@ -23,8 +23,8 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void findAll() throws Exception, ValidationAdvince {
-        userController.put(FilmUserTestData.user);
+    void findAll() throws Exception {
+        userController.create(FilmUserTestData.user);
         mockMvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -68,9 +68,10 @@ public class UserControllerTest {
 
     @Test
     void putEmptyName() throws Exception {
+        userController.create(FilmUserTestData.user);
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/users")
-                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"\",\"birthday\":\"1980-05-13\"}")
+                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -93,13 +94,13 @@ public class UserControllerTest {
     void createAllOk() throws Exception {
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/users")
-                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"name\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}")
+                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content()
-                        .json("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"name\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
+                        .json("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}"));
     }
 
     @Test
@@ -126,13 +127,13 @@ public class UserControllerTest {
     void createEmptyName() throws Exception {
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/users")
-                                .content("{\"id\":2,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"\",\"birthday\":\"1980-05-13\"}")
+                                .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content()
-                        .json("{\"id\":2,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
+                        .json("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"login\",\"birthday\":\"1980-05-13\"}"));
     }
 
     @Test

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class FilmValidator {
 
     @SneakyThrows
-    public void validate(Film film) throws ValidationException {
+    public void validate(Film film) {
         if(LocalDate.of(1895, 12,28).isAfter(film.getReleaseDate())){
             throw new ValidationAdvince();
         }

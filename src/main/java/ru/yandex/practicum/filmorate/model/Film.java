@@ -21,6 +21,6 @@ public class Film {
 
     private LocalDate releaseDate;
 
-    private int duration;
+    private Integer duration;
 
 }

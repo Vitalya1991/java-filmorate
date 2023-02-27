@@ -8,6 +8,6 @@ public class UserValidator {
     public void validate (User user) {
         if(user.getName() == null){
             user.setName(user.getLogin());}
-        }
+    }
 }
 
