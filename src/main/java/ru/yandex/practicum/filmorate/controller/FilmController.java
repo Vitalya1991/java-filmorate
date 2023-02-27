@@ -49,7 +49,7 @@ public class FilmController {
     @PutMapping
     public Film putFilm(@Valid @RequestBody Film film){
         filmValidator.validate(film);
-        if (!films.containsKey(film.getId())){throw new ValidationAdvince();
+        if (films.containsKey(film.getId())){throw new ValidationAdvince();
         }
         log.info("Вы - {}!", " обновили данные для текущего фильма");
         films.put(film.getId(), film);
