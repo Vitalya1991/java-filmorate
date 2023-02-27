@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import ru.yandex.practicum.filmorate.controller.UserController;
+import ru.yandex.practicum.filmorate.controller.ValidationAdvince;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -22,7 +23,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void findAll() throws Exception {
+    void findAll() throws Exception, ValidationAdvince {
         userController.put(FilmUserTestData.user);
         mockMvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(status().isOk())

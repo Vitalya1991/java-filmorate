@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User put(@Valid @RequestBody User user) {
+    public User put(@Valid @RequestBody User user) throws ValidationAdvince {
         userValidatior.validate(user);
         if (!users.containsKey(user.getId())){throw new ValidationAdvince();
         }
