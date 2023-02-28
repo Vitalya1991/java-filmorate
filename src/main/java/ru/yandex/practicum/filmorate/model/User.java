@@ -1,4 +1,5 @@
 package ru.yandex.practicum.filmorate.model;
+
 import javax.validation.constraints.*;
 
 import lombok.AllArgsConstructor;

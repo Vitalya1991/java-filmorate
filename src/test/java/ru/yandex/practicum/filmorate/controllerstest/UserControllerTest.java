@@ -8,23 +8,30 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.controller.ValidationAdvince;
+import ru.yandex.practicum.filmorate.model.User;
+
+import java.time.LocalDate;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerTest {
+class UserControllerTest {
     @Autowired
     UserController userController;
     @Autowired
     private MockMvc mockMvc;
 
+    public static User user = new User(1, "lol@mail.ru", "login", "name", LocalDate.of(1980, 5, 13));
+
     @Test
     void findAll() throws Exception {
-        userController.create(FilmUserTestData.user);
+        userController.create(user);
         mockMvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -67,7 +74,7 @@ public class UserControllerTest {
 
     @Test
     void createAllOk() throws Exception {
-        userController.create(FilmUserTestData.user);
+        userController.create(user);
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/users")
                                 .content("{\"id\":1,\"email\":\"lol@mail.ru\",\"login\":\"login\",\"name\":\"name\",\"birthday\":\"1980-05-13\"}")

@@ -5,9 +5,10 @@ import ru.yandex.practicum.filmorate.model.User;
 
 @Component
 public class UserValidator {
-    public void validate (User user) {
-        if(user.getName() == null){
-            user.setName(user.getLogin());}
+    public void validate(User user) {
+        if (user.getName() == null) {
+            user.setName(user.getLogin());
+        }
     }
 }
 

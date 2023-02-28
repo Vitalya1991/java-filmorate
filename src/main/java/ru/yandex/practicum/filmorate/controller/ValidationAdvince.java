@@ -11,7 +11,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 public class ValidationAdvince extends Throwable {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
-    public String validationException(){
+    public String validationException() {
         return "Sorry, some error";
     }
 }

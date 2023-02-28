@@ -9,7 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.yandex.practicum.filmorate.controller.FilmController;
-
+import ru.yandex.practicum.filmorate.model.Film;
+import java.time.LocalDate;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,10 +23,11 @@ class FilmControllerTest {
     FilmController filmController;
     @Autowired
     private MockMvc mockMvc;
+    public static Film film = new Film(1, "New film", "Some description", LocalDate.of(2020, 10, 13), 120);
 
     @Test
     void findAll() throws Exception {
-        filmController.create(FilmUserTestData.film);
+        filmController.create(film);
         mockMvc.perform(MockMvcRequestBuilders.get("/films"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -36,7 +38,7 @@ class FilmControllerTest {
 
     @Test
     void createAllOk() throws Exception {
-        filmController.create(FilmUserTestData.film);
+        filmController.create(film);
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/films")
                                 .content("{\"id\":1,\"name\":\"New film\",\"description\":\"Some description\",\"releaseDate\":\"2020-10-13\",\"duration\":\"120\"}")
@@ -47,6 +49,7 @@ class FilmControllerTest {
                 .andExpect(content()
                         .json("{\"id\":3,\"name\":\"New film\",\"description\":\"Some description\",\"releaseDate\":\"2020-10-13\",\"duration\":120}"));
     }
+
     @Test
     void createBadData() throws Exception {
         mockMvc.perform(

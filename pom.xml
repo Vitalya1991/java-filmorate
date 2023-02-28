@@ -12,7 +12,7 @@
 	<artifactId>filmorate</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	 <name>filmorate</name>
-	<description>качество фильмов</description>
+	<description>сервис для оценки качества фильмов</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
