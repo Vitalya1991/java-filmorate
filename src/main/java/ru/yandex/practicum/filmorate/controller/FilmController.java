@@ -1,67 +1,94 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import javax.validation.Valid;
-
-import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.ErrorResponse;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.validator.FilmValidator;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import javax.validation.Valid;
+import java.util.*;
 
-@RestController
-@RequestMapping("/films")
-@Getter
 @Slf4j
+@RestController
 public class FilmController {
-    private final Map<Integer, Film> films = new HashMap<>();
 
-    private final FilmValidator filmValidator;
-    private int id = 1;
+    private final FilmService filmService;
 
-    public FilmController(FilmValidator filmValidator) {
-        this.filmValidator = filmValidator;
+    @Autowired
+    public FilmController (FilmService filmService) {
+        this.filmService = filmService;
     }
 
-    @GetMapping
+    @PostMapping("films")
+    public Film create(@Valid @RequestBody Film film) throws ValidationException {
+        return filmService.create(film);
+    }
+
+    @PutMapping("films")
+    public Film update(@Valid @RequestBody Film film) throws ValidationException {
+        return filmService.update(film);
+    }
+
+    @GetMapping("/films")
     public Collection<Film> findAll() {
-        log.info("Получен запрос на получение списка фильмов");
-        return films.values();
+        return filmService.findAll();
     }
 
-
-    @SneakyThrows
-    @PostMapping
-    public Film create(@Valid @RequestBody Film film) {
-        filmValidator.validate(film);
-        if (film.getDuration() <= 0) {
-            throw new ValidationAdvince();
-        }
-        film.setId(id);
-        id++;
-        films.put(film.getId(), film);
-        log.info("Вы - {}!", " обновили данные для нового фильма");
-        return film;
+    @GetMapping("/films/{id}")
+    public Film findFilm(@PathVariable("id") Integer id) {
+        return filmService.getById(id);
     }
 
-    @SneakyThrows
-    @PutMapping
-    public Film putFilm(@Valid @RequestBody Film film) {
-        filmValidator.validate(film);
-        if (!films.containsKey(film.getId())) {
-            throw new ValidationAdvince();
-        }
-        films.put(film.getId(), film);
-        log.info("данные для документа", film.getId());
-        return film;
+    @PutMapping("/films/{id}/like/{userId}")
+    public Film addLikeFromUser(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
+        return filmService.addUserLike(id,userId);
     }
 
+    @DeleteMapping("/films/{id}/like/{userId}")
+    public Film deleteLikeFromUser(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
+        return filmService.deleteUserLike(id,userId);
+    }
+
+    @GetMapping("/films/popular")
+    public Collection<Film> getPopularFilms(@RequestParam(required = false) final Integer count) {
+        return filmService.returnPopularFilms(count);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handle(final ValidationException e) {
+        return new ErrorResponse(
+                "Ошибка в отправленных данных", e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle(final FilmNotFoundException e) {
+        return new ErrorResponse(
+                "Фильм не найден", e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle(final UserNotFoundException e) {
+        return new ErrorResponse(
+                "Пользователь не найден", e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handle(final Exception e) {
+        return new ErrorResponse(
+                "Ошибка", e.getMessage()
+        );
+    }
 }
-
-
-
-
