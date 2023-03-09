@@ -37,7 +37,9 @@ public class InMemoryFilmStorage implements FilmStorage {
         films.remove(film.getId());
         return film;
     }
-
+    public Map<Integer, Film> getFilmMap() {
+        return films;
+    }
     @Override
     public Film getById(int id) {
         return films.get(id);

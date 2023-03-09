@@ -19,9 +19,14 @@ public class Film {
     private final String name;
     @Size(message = "Description size of the film must be up 200 chars", min = 1, max = 200)
     private final String description;
+    @NotBlank(message = "Email can not be blank")
     private final LocalDate releaseDate;
     @Positive(message = "Duration of the film can not be negative or zero")
     private final int duration;
+    @JsonIgnore
+    public Set<Integer> getUsersLikes() {
+        return usersLikes;
+    }
     @JsonIgnore
     private Set<Integer> usersLikes;
 

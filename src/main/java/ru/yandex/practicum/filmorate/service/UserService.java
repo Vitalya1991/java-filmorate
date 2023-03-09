@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,12 +49,12 @@ public class UserService {
         return userStorage.getValues();
     }
 
-    public User getById (Integer userId) {
-        if (!getIds().contains(userId)) {
-            log.error("Пользователь в коллекции не найден");
+    public User getById(Integer userId) {
+        if (userStorage.getUserMap().containsKey(userId)) {
+            return userStorage.getUserMap().get(userId);
+        } else {
             throw new UserNotFoundException("Ошибка при поиске: пользователь id = " + userId + " не найден");
         }
-        return userStorage.getById(userId);
     }
 
     public User addFriend(Integer userId1, Integer userId2) {
@@ -104,7 +105,7 @@ public class UserService {
     public Collection<User> returnCommonFriends(Integer userId1, Integer userId2) {
         if (getIds().contains(userId1)) {
             if (getIds().contains(userId2)) {
-                Set<Integer> temp =  userStorage.getById(userId1).getFriends()
+                Set<Integer> temp = userStorage.getById(userId1).getFriends()
                         .stream()
                         .filter(userStorage.getById(userId2).getFriends()::contains)
                         .collect(Collectors.toSet());
@@ -123,7 +124,7 @@ public class UserService {
         }
     }
 
-    public void validate(User user) throws ValidationException {
+    public void validate(@Valid User user) throws ValidationException {
         if (user.getLogin().contains(" ")) {
             log.error("В логине пользователя есть пробел");
             throw new ValidationException("Не пройдена валидация пользователя по логину: " + user.getLogin());
