@@ -2,19 +2,17 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.ErrorResponse;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import java.util.*;
-@RequestMapping("/users")
+import java.util.Collection;
+
 @Slf4j
+@RequestMapping("/users")
 @RestController
 public class UserController {
 
@@ -40,7 +38,7 @@ public class UserController {
         return userService.findAll();
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public User findUser(@PathVariable("id") Integer id) throws UserNotFoundException {
         return userService.getById(id);
     }
@@ -64,5 +62,4 @@ public class UserController {
     public Collection<User> findUsersCommonFriends(@PathVariable("id") Integer id, @PathVariable("otherId") Integer otherId) throws UserNotFoundException {
         return userService.returnCommonFriends(id,otherId);
     }
-
 }

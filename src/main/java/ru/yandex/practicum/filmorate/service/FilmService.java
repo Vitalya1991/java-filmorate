@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.FilmAlreadyHaveException;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -55,25 +54,25 @@ public class FilmService {
     }
 
     public Film getById(Integer filmId) {
-        if (!filmStorage.getFilmMap().containsKey(filmId)) {
+        if (!getIds().contains(filmId)) {
             log.error("Фильм в коллекции не найден");
             throw new FilmNotFoundException("Ошибка при поиске: фильм id = " + filmId + " не найден");
         }
-        return filmStorage.getFilmMap().get(filmId);
+        return filmStorage.getById(filmId);
     }
 
-    public void addUserLike(int filmId, int userId) {
-        if (userStorage.getUserMap().containsKey(userId)) {
-            Film film = getById(filmId);
-             if (film.getUsersLikes().contains(userId)) {
+    public Film addUserLike(int filmId, int userId) {
+        if (getIds().contains(filmId)) {
+            if (getUsersIds().contains(userId)) {
                 filmStorage.getById(filmId).addUserLike(userId);
-                 log.debug("Ваши лайки уже есть по Id фильма : " + filmId);
-                 throw new FilmAlreadyHaveException("ваши лайки уже есть по идентификатору фильма: : " + filmId);
-             } else {
-                 film.getUsersLikes().add(userId);
-             }
+                return filmStorage.getById(filmId);
+            } else {
+                log.error("Пользователь в коллекции не найден");
+                throw new UserNotFoundException("Ошибка при добавлении лайка: пользователь c id = " + userId + " не найден");
+            }
         } else {
-            throw new UserNotFoundException("Пользователь не найден по идентификатору: " + userId);
+            log.error("Фильм в коллекции не найден");
+            throw new FilmNotFoundException("Ошибка при добавлении лайка: фильм c id = " + filmId + " не найден");
         }
     }
 
@@ -119,6 +118,6 @@ public class FilmService {
     }
 
     private int compare(Film f0, Film f1) {
-        return Integer.compare(f1.getUsersLikes().size(), f0.getUsersLikes().size());
+        return -1 * Integer.compare(f0.getUsersLikes().size(), f1.getUsersLikes().size());
     }
 }

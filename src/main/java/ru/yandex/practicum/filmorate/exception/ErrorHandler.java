@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.exception;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -9,22 +8,35 @@ import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
 @RestControllerAdvice(basePackages = "ru.yandex.practicum.filmorate")
 public class ErrorHandler {
-
-    @ExceptionHandler({FilmNotFoundException.class, UserNotFoundException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFound(RuntimeException e) {
-        return new ErrorResponse("Not found", e.getMessage());
-    }
-
-    @ExceptionHandler(ValidationException.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleNotValid(RuntimeException e) {
-        return new ErrorResponse("Validation error", e.getMessage());
+    public ErrorResponse handle(final ValidationException e) {
+        return new ErrorResponse(
+                "Ошибка в отправленных данных", e.getMessage()
+        );
     }
 
-    @ExceptionHandler({FilmAlreadyHaveException.class, UserAlreadyHaveException.class})
-    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-    public ErrorResponse handleAlreadyHave(RuntimeException e) {
-        return new ErrorResponse("Already have", e.getMessage());
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle(final FilmNotFoundException e) {
+        return new ErrorResponse(
+                "Фильм не найден", e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle(final UserNotFoundException e) {
+        return new ErrorResponse(
+                "Пользователь не найден", e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handle(final Exception e) {
+        return new ErrorResponse(
+                "Ошибка", e.getMessage()
+        );
     }
 }

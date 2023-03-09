@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -37,9 +38,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         films.remove(film.getId());
         return film;
     }
-    public Map<Integer, Film> getFilmMap() {
-        return films;
-    }
+
     @Override
     public Film getById(int id) {
         return films.get(id);
