@@ -3,10 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -19,7 +16,6 @@ public class Film {
     private final String name;
     @Size(message = "Description size of the film must be up 200 chars", min = 1, max = 200)
     private final String description;
-    @NotBlank(message = "RealiseDate can not be blank")
     private final LocalDate releaseDate;
     @Positive(message = "Duration of the film can not be negative or zero")
     private final int duration;
