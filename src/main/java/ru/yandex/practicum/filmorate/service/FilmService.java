@@ -13,6 +13,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
+
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -55,12 +56,13 @@ public class FilmService {
     }
 
     public Film getById(Integer filmId) {
-        if (!getIds().contains(filmId)) {
-            log.error("Фильм в коллекции не найден");
-            throw new FilmNotFoundException("Ошибка при поиске: фильм id = " + filmId + " не найден");
+        if (getIds().contains(filmId)) {
+            return filmStorage.getById(filmId);
         }
-        return filmStorage.getById(filmId);
+        log.error("Фильм в коллекции не найден");
+        throw new FilmNotFoundException("Ошибка при поиске: фильм id = " + filmId + " не найден");
     }
+
 
     public Film addUserLike(int filmId, int userId) {
         if (getIds().contains(filmId)) {
@@ -78,18 +80,16 @@ public class FilmService {
     }
 
     public Film deleteUserLike(int filmId, int userId) {
-        if (getIds().contains(filmId)) {
-            if (getUsersIds().contains(userId)) {
-                filmStorage.getById(filmId).deleteUserLike(userId);
-                return filmStorage.getById(filmId);
-            } else {
-                log.error("Пользователь в коллекции не найден");
-                throw new UserNotFoundException("Ошибка при удалении лайка: пользователь c id = " + userId + " не найден");
-            }
-        } else {
+        if (!getIds().contains(filmId)) {
             log.error("Фильм в коллекции не найден");
             throw new FilmNotFoundException("Ошибка при удалении лайка: фильм c id = " + filmId + " не найден");
         }
+        if (!getUsersIds().contains(userId)) {
+            log.error("Пользователь в коллекции не найден");
+            throw new UserNotFoundException("Ошибка при удалении лайка: пользователь c id = " + userId + " не найден");
+        }
+        filmStorage.getById(filmId).deleteUserLike(userId);
+        return filmStorage.getById(filmId);
     }
 
     public Collection<Film> returnPopularFilms(@DefaultValue("10") Integer size) {
