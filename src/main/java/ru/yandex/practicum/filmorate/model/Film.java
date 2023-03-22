@@ -1,14 +1,11 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 
 @Data
 public class Film {
@@ -22,6 +19,10 @@ public class Film {
     private final LocalDate releaseDate;
     @Positive(message = "Duration of the film can not be negative or zero")
     private final int duration;
+    @JsonIgnore
+    public Set<Integer> getUsersLikes() {
+        return usersLikes;
+    }
     @JsonIgnore
     private Set<Integer> usersLikes;
 

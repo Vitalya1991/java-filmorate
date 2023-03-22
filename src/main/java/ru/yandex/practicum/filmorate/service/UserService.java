@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -123,7 +125,7 @@ public class UserService {
         }
     }
 
-    public void validate(User user) throws ValidationException {
+    public void validate(@Valid User user) throws ValidationException {
         if (user.getLogin().contains(" ")) {
             log.error("В логине пользователя есть пробел");
             throw new ValidationException("Не пройдена валидация пользователя по логину: " + user.getLogin());
