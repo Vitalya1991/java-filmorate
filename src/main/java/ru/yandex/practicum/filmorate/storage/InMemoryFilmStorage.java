@@ -3,18 +3,16 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-    private final Map<Integer, Film> films = new HashMap<>();
     private int id = 1;
 
     @Override
@@ -28,10 +26,15 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film replace(Film film) {
-        film.setUsersLikes(new HashSet<>());
-        films.replace(film.getId(), film);
-        return film;
+    int keyId = film.getId();
+        if (films.containsKey(keyId)) {
+        films.put(keyId, film);
+        log.debug("Film update an ID :" + keyId);
+    } else {
+        log.warn("Film update error :" + film.getName());
+        throw new FilmNotFoundException("A film with an ID :" + keyId + " is not registered.");
     }
+        return films.get(keyId);}
 
     @Override
     public Film delete(Film film) {

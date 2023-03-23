@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.controller.ValidationAdvince;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
@@ -31,14 +30,14 @@ public class FilmService {
         this.userStorage = userStorage;
     }
 
-    public Film create(Film film) throws ValidationException {
+    public Film create(Film film) {
         validate(film);
         filmStorage.add(film);
         log.info("Фильм добавлен в коллекцию");
         return film;
     }
 
-    public Film update(Film film) throws ValidationException {
+    public Film update(Film film) {
         validate(film);
         if (getIds().contains(film.getId())) {
             filmStorage.replace(film);
@@ -56,35 +55,34 @@ public class FilmService {
     }
 
     public Film getById(Integer filmId) {
-        if (getIds().contains(filmId)) {
-            return filmStorage.getById(filmId);
+        if (!FilmStorage.films.containsKey(filmId)) {
+            log.error("Фильм в коллекции не найден");
+            throw new FilmNotFoundException("Ошибка при поиске: фильм id = " + filmId + " не найден");
         }
-        log.error("Фильм в коллекции не найден");
-        throw new FilmNotFoundException("Ошибка при поиске: фильм id = " + filmId + " не найден");
+        return filmStorage.getById(filmId);
     }
 
 
     public Film addUserLike(int filmId, int userId) {
-        if (getIds().contains(filmId)) {
-            if (getUsersIds().contains(userId)) {
-                filmStorage.getById(filmId).addUserLike(userId);
-                return filmStorage.getById(filmId);
-            } else {
-                log.error("Пользователь в коллекции не найден");
-                throw new UserNotFoundException("Ошибка при добавлении лайка: пользователь c id = " + userId + " не найден");
-            }
-        } else {
+        if (!FilmStorage.films.containsKey(filmId)) {
+            log.error("Пользователь в коллекции не найден");
+            throw new UserNotFoundException("Ошибка при добавлении лайка: пользователь c id = " + userId + " не найден");
+        }
+        if (!getUsersIds().contains(userId)) {
             log.error("Фильм в коллекции не найден");
             throw new FilmNotFoundException("Ошибка при добавлении лайка: фильм c id = " + filmId + " не найден");
         }
+        filmStorage.getById(filmId).addUserLike(userId);
+        return filmStorage.getById(filmId);
     }
 
+
     public Film deleteUserLike(int filmId, int userId) {
-        if (!getIds().contains(filmId)) {
+        if (!FilmStorage.films.containsKey(filmId)) {
             log.error("Фильм в коллекции не найден");
             throw new FilmNotFoundException("Ошибка при удалении лайка: фильм c id = " + filmId + " не найден");
         }
-        if (!getUsersIds().contains(userId)) {
+        if (!UserStorage.users.containsKey(userId)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при удалении лайка: пользователь c id = " + userId + " не найден");
         }

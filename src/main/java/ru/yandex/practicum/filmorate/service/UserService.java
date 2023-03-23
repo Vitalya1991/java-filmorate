@@ -51,7 +51,7 @@ public class UserService {
     }
 
     public User getById(Integer userId) {
-        if (getIds().contains(userId)) {
+        if (UserStorage.users.containsKey(userId)) {
             return userStorage.getById(userId);
         }
         log.error("Пользователь в коллекции не найден");
@@ -60,11 +60,11 @@ public class UserService {
 
 
     public User addFriend(Integer userId1, Integer userId2) {
-        if (!getIds().contains(userId1)) {
+        if (!UserStorage.users.containsKey(userId1)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при добавлении в друзья: пользователь c id = " + userId1 + " не найден");
         }
-        if (!getIds().contains(userId2)) {
+        if (!UserStorage.users.containsKey(userId2)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при добавлении в друзья: пользователь c id = " + userId2 + " не найден");
         }
@@ -75,11 +75,11 @@ public class UserService {
 
 
     public User deleteFriend(Integer userId1, Integer userId2) {
-        if (!getIds().contains(userId1)) {
+        if (!UserStorage.users.containsKey(userId1)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при удалении из друзей: пользователь c id = " + userId1 + " не найден");
         }
-        if (!getIds().contains(userId2)) {
+        if (!UserStorage.users.containsKey(userId2)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при удалении из друзей: пользователь c id = " + userId2 + " не найден");
         }
@@ -90,39 +90,39 @@ public class UserService {
 
 
     public Collection<User> returnFriendCollection(Integer userId) {
-        if (getIds().contains(userId)) {
-            Set<Integer> temp = userStorage.getById(userId).getFriends();
-            return userStorage.getValues().stream()
-                    .filter(x -> temp.contains(x.getId()))
-                    .sorted(this::compare)
-                    .collect(Collectors.toList());
-        } else {
+        if (!UserStorage.users.containsKey(userId)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при поиске друзей: пользователь c id = " + userId + " не найден");
         }
+        Set<Integer> temp = userStorage.getById(userId).getFriends();
+        return userStorage.getValues().stream()
+                .filter(x -> temp.contains(x.getId()))
+                .sorted(this::compare)
+                .collect(Collectors.toList());
     }
 
-    public Collection<User> returnCommonFriends(Integer userId1, Integer userId2) {
-        if (getIds().contains(userId1)) {
-            if (getIds().contains(userId2)) {
-                Set<Integer> temp = userStorage.getById(userId1).getFriends()
-                        .stream()
-                        .filter(userStorage.getById(userId2).getFriends()::contains)
-                        .collect(Collectors.toSet());
 
-                return userStorage.getValues().stream()
-                        .filter(x -> temp.contains(x.getId()))
-                        .sorted(this::compare)
-                        .collect(Collectors.toList());
-            } else {
-                log.error("Пользователь в коллекции не найден");
-                throw new UserNotFoundException("Ошибка при поиске общих друзей: пользователь c id = " + userId2 + " не найден");
-            }
-        } else {
+    public Collection<User> returnCommonFriends(Integer userId1, Integer userId2) {
+        if (!UserStorage.users.containsKey(userId1)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при поиске общих друзей: пользователь c id = " + userId1 + " не найден");
         }
+        if (!UserStorage.users.containsKey(userId2)) {
+            log.error("Пользователь в коллекции не найден");
+            throw new UserNotFoundException("Ошибка при поиске общих друзей: пользователь c id = " + userId2 + " не найден");
+        }
+        Set<Integer> temp = userStorage.getById(userId1).getFriends()
+                .stream()
+                .filter(userStorage.getById(userId2).getFriends()::contains)
+                .collect(Collectors.toSet());
+
+        return userStorage.getValues().stream()
+                .filter(x -> temp.contains(x.getId()))
+                .sorted(this::compare)
+                .collect(Collectors.toList());
+
     }
+
 
     public void validate(@Valid User user) throws ValidationException {
         if (user.getLogin().contains(" ")) {

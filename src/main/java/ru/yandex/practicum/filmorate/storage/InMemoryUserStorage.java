@@ -1,15 +1,19 @@
 package ru.yandex.practicum.filmorate.storage;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
-    private final Map<Integer, User> users = new HashMap<>();
     private int id = 1;
 
     @Override
@@ -23,9 +27,17 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User replace(User user) {
-        user.setFriends(new HashSet<>());
-        users.replace(user.getId(), user);
-        return user;
+        int keyId;
+
+        keyId = user.getId();
+        if (users.containsKey(keyId)) {
+            users.put(keyId, user);
+            log.debug("Update user :" + users.get(id));
+        } else {
+            log.warn("User is not registered an ID :" + keyId);
+            throw new UserNotFoundException("not found ID :" + keyId);
+        }
+        return users.get(keyId);
     }
 
     @Override
