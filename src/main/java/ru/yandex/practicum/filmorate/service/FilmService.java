@@ -37,16 +37,13 @@ public class FilmService {
         return film;
     }
 
-    public Film update(Film film) {
+    public Film update(Film film)  {
         validate(film);
-        if (getIds().contains(film.getId())) {
-            filmStorage.replace(film);
-            log.info("Фильм обновлен в коллекции");
-        } else {
-            log.error("Фильм в коллекции не найден");
-            throw new FilmNotFoundException("Ошибка при обновлении: фильм id = " + film.getId() + " не найден");
+        if (filmStorage.films.containsKey(film.getId())) {
+            return filmStorage.replace(film);
         }
-        return film;
+        log.error("Фильм в коллекции не найден");
+        throw new FilmNotFoundException("Ошибка при обновлении: фильм id = " + film.getId() + " не найден");
     }
 
     public Collection<Film> findAll() {
@@ -55,7 +52,7 @@ public class FilmService {
     }
 
     public Film getById(Integer filmId) {
-        if (!FilmStorage.films.containsKey(filmId)) {
+        if (!filmStorage.films.containsKey(filmId)) {
             log.error("Фильм в коллекции не найден");
             throw new FilmNotFoundException("Ошибка при поиске: фильм id = " + filmId + " не найден");
         }
@@ -64,7 +61,7 @@ public class FilmService {
 
 
     public Film addUserLike(int filmId, int userId) {
-        if (!FilmStorage.films.containsKey(filmId)) {
+        if (!filmStorage.films.containsKey(filmId)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при добавлении лайка: пользователь c id = " + userId + " не найден");
         }
@@ -78,11 +75,11 @@ public class FilmService {
 
 
     public Film deleteUserLike(int filmId, int userId) {
-        if (!FilmStorage.films.containsKey(filmId)) {
+        if (!filmStorage.films.containsKey(filmId)) {
             log.error("Фильм в коллекции не найден");
             throw new FilmNotFoundException("Ошибка при удалении лайка: фильм c id = " + filmId + " не найден");
         }
-        if (!UserStorage.users.containsKey(userId)) {
+        if (!userStorage.users.containsKey(userId)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при удалении лайка: пользователь c id = " + userId + " не найден");
         }
@@ -117,7 +114,7 @@ public class FilmService {
                 .collect(Collectors.toList());
     }
 
-    private int compare(Film f0, Film f1) {
-        return -1 * Integer.compare(f0.getUsersLikes().size(), f1.getUsersLikes().size());
+    private int compare(Film first, Film last) {
+        return Integer.compare(last.getUsersLikes().size(), first.getUsersLikes().size());
     }
 }

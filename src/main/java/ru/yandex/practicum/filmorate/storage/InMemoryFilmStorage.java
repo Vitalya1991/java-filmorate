@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
@@ -26,15 +25,10 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film replace(Film film) {
-    int keyId = film.getId();
-        if (films.containsKey(keyId)) {
-        films.put(keyId, film);
-        log.debug("Film update an ID :" + keyId);
-    } else {
-        log.warn("Film update error :" + film.getName());
-        throw new FilmNotFoundException("A film with an ID :" + keyId + " is not registered.");
+        film.setUsersLikes(new HashSet<>());
+        films.replace(film.getId(), film);
+       return film;
     }
-        return films.get(keyId);}
 
     @Override
     public Film delete(Film film) {
@@ -55,7 +49,8 @@ public class InMemoryFilmStorage implements FilmStorage {
                 .collect(Collectors.toList());
     }
 
-    private int compare(Film f0, Film f1) {
-        return Integer.compare(f0.getId(), f1.getId());
+
+    private int compare(Film first, Film last) {
+        return Integer.compare(first.getId(), last.getId());
     }
 }
