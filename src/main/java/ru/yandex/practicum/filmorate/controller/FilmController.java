@@ -1,67 +1,58 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import javax.validation.Valid;
-
-import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.validator.FilmValidator;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
+import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-@RestController
-@RequestMapping("/films")
-@Getter
 @Slf4j
+@RequestMapping("/films")
+@RestController
 public class FilmController {
-    private final Map<Integer, Film> films = new HashMap<>();
 
-    private final FilmValidator filmValidator;
-    private int id = 1;
+    private final FilmService filmService;
 
-    public FilmController(FilmValidator filmValidator) {
-        this.filmValidator = filmValidator;
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
+
+    @PostMapping
+    public Film create(@Valid @RequestBody Film film)  {
+        return filmService.create(film);
+    }
+
+    @PutMapping
+    public Film update(@Valid @RequestBody Film film) {
+        return filmService.update(film);
     }
 
     @GetMapping
     public Collection<Film> findAll() {
-        log.info("Получен запрос на получение списка фильмов");
-        return films.values();
+        return filmService.findAll();
     }
 
-
-    @SneakyThrows
-    @PostMapping
-    public Film create(@Valid @RequestBody Film film) {
-        filmValidator.validate(film);
-        if (film.getDuration() <= 0) {
-            throw new ValidationAdvince();
-        }
-        film.setId(id);
-        id++;
-        films.put(film.getId(), film);
-        log.info("Вы - {}!", " обновили данные для нового фильма");
-        return film;
+    @GetMapping("/{id}")
+    public Film findFilm(@PathVariable("id") Integer id) {
+        return filmService.getById(id);
     }
 
-    @SneakyThrows
-    @PutMapping
-    public Film putFilm(@Valid @RequestBody Film film) {
-        filmValidator.validate(film);
-        if (!films.containsKey(film.getId())) {
-            throw new ValidationAdvince();
-        }
-        films.put(film.getId(), film);
-        log.info("данные для документа", film.getId());
-        return film;
+    @PutMapping("/{id}/like/{userId}")
+    public Film addLikeFromUser(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
+        return filmService.addUserLike(id,userId);
     }
 
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film deleteLikeFromUser(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
+        return filmService.deleteUserLike(id,userId);
+    }
+
+    @GetMapping("/popular")
+    public Collection<Film> getPopularFilms(@RequestParam(value = "count", defaultValue = "10") final Integer count) {
+        return filmService.returnPopularFilms(count);
+    }
 }
-
-
-
-

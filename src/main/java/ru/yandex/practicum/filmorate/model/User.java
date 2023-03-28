@@ -1,31 +1,32 @@
 package ru.yandex.practicum.filmorate.model;
 
+import java.time.LocalDate;
+import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import javax.validation.constraints.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NonNull;
-
-import java.time.LocalDate;
-
 @Data
-@AllArgsConstructor
 public class User {
 
     private int id;
-
-    @Email
-    @NotBlank
-    private String email;
-
-    @NotBlank
-    @Pattern(regexp = "^\\S*$")
-    private String login;
-
+    @NotNull(message = "Email can not be null")
+    @NotBlank(message = "Email can not be blank")
+    @Email(message = "Email is not valid")
+    private final String email;
+    @NotNull(message = "Login can not be null")
+    @NotBlank(message = "Login can not be blank")
+    private final String login;
     private String name;
+    @PastOrPresent(message = "Birthday can not be in the future")
+    private final LocalDate birthday;
+    @JsonIgnore
+    private Set<Integer> friends;
 
-    @Past
-    private LocalDate birthday;
-
+    public void addFriends(int id) {
+        this.friends.add(id);
+    }
+    public void deleteFriends(int id) {
+        this.friends.remove(id);
+    }
 }
-

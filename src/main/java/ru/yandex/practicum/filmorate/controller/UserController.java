@@ -1,58 +1,65 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.validator.UserValidator;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
+@Slf4j
 @RequestMapping("/users")
 @RestController
-@Slf4j
-@Getter
 public class UserController {
-    private final Map<Integer, User> users = new HashMap<>();
 
-    private final UserValidator userValidatior;
-    private int id = 1;
+    private final UserService userService;
 
-    public UserController(UserValidator userValidatior) {
-        this.userValidatior = userValidatior;
+    @Autowired
+    public UserController (UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping
+    public User create(@Valid @RequestBody User user) throws  ValidationException{
+        return userService.create(user);
+    }
+
+    @PutMapping
+    public User update(@Valid @RequestBody User user) throws UserNotFoundException, ValidationException {
+        return userService.update(user);
     }
 
     @GetMapping
-    public Collection<User> getAll() {
-        log.info("Получен запрос на получение списка пользователей");
-        return users.values();
+    public Collection<User> findAll() {
+        return userService.findAll();
     }
 
-
-    @PostMapping
-    public User create(@Valid @RequestBody User user) {
-        userValidatior.validate(user);
-        user.setId(id);
-        id++;
-        users.put(user.getId(), user);
-        log.info("добавили нового пользователя", user.getId());
-        return user;
+    @GetMapping("/{id}")
+    public User findUser(@PathVariable("id") Integer id) throws UserNotFoundException {
+        return userService.getById(id);
     }
 
-    @SneakyThrows
-    @PutMapping
-    public User put(@Valid @RequestBody User user) {
-        userValidatior.validate(user);
-        if (!users.containsKey(user.getId())) {
-            throw new ValidationAdvince();
-        }
-        users.put(user.getId(), user);
-        log.info("данные для пользователя", user.getId());
-        return user;
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) throws UserNotFoundException {
+        return userService.addFriend(id,friendId);
     }
 
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) throws UserNotFoundException {
+        return userService.deleteFriend(id,friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public Collection<User> findUserFriends(@PathVariable("id") Integer id) throws UserNotFoundException {
+        return userService.returnFriendCollection(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public Collection<User> findUsersCommonFriends(@PathVariable("id") Integer id, @PathVariable("otherId") Integer otherId) throws UserNotFoundException {
+        return userService.returnCommonFriends(id,otherId);
+    }
 }
