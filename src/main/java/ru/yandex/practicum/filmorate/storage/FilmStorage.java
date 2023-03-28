@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface FilmStorage extends Storage<Film> {
 
-     Map<Integer, Film> films = new HashMap<>();
+    Map<Integer, Film> storage = new HashMap<>();
 }

@@ -6,6 +6,5 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface UserStorage extends Storage<User> {
-     Map<Integer, User> users = new HashMap<>();
-
+   Map<Integer, User> storage = new HashMap<>();
 }

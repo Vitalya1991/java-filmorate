@@ -3,11 +3,14 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.database.interfaces.FriendStorage;
+import ru.yandex.practicum.filmorate.storage.database.interfaces.UserDStorage;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -18,14 +21,15 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     private final UserStorage userStorage;
-
+    private final FriendStorage friendStorage;
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(@Qualifier("UserDbStorage") UserDStorage userStorage,
+                       @Qualifier("FriendDbStorage")FriendStorage friendStorage) {
         this.userStorage = userStorage;
-    }
+        this.friendStorage = friendStorage;}
 
 
-    public User create(User user) throws ValidationException {
+    public User create(User user)  {
         validate(user);
         userStorage.add(user);
         log.info("Пользователь добавлен в коллекцию");
@@ -33,10 +37,11 @@ public class UserService {
     }
 
 
-    public User update(User user) throws ValidationException{
+    public User update(User user) {
         validate(user);
-        if (userStorage.users.containsKey(user.getId())) {
-            return userStorage.replace(user);
+        if (userStorage.storage.containsKey(user.getId())) {
+            userStorage.replace(user);
+            return userStorage.getById(user.getId());
         }
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при обновлении: пользователь c id = " + user.getId() + " не найден");
@@ -44,12 +49,16 @@ public class UserService {
 
     public Collection<User> findAll() {
         log.info("Возвращен список пользователей");
-        return userStorage.getValues();
+        Collection<User> users = userStorage.getValues();
+        users.forEach(friendStorage::loadFriends);
+        return users;
     }
 
     public User getById(Integer userId) {
-        if (userStorage.users.containsKey(userId)) {
-            return userStorage.getById(userId);
+        if (userStorage.storage.containsKey(userId)) {
+            User user = userStorage.getById(userId);
+            friendStorage.loadFriends(user);
+            return user;
         }
         log.error("Пользователь в коллекции не найден");
         throw new UserNotFoundException("Ошибка при поиске: пользователь id = " + userId + " не найден");
@@ -57,37 +66,48 @@ public class UserService {
 
 
     public User addFriend(Integer userId1, Integer userId2) {
-        if (!userStorage.users.containsKey(userId1)) {
+        if (!userStorage.storage.containsKey(userId1)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при добавлении в друзья: пользователь c id = " + userId1 + " не найден");
         }
-        if (!userStorage.users.containsKey(userId2)) {
+        if (!userStorage.storage.containsKey(userId2)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при добавлении в друзья: пользователь c id = " + userId2 + " не найден");
+        }  if (friendStorage.containsFriendship(userId2, userId1, false)) {
+            friendStorage.updateFriendship(userId2, userId1, true, userId2, userId1);
+        } else if (!friendStorage.containsFriendship(userId1, userId2, null)){
+            friendStorage.insertFriendship(userId1, userId2);
         }
-        userStorage.getById(userId1).addFriends(userId2);
-        userStorage.getById(userId2).addFriends(userId1);
-        return userStorage.getById(userId1);
+        User user = userStorage.getById(userId1);
+        friendStorage.loadFriends(user);
+        return user;
     }
 
 
     public User deleteFriend(Integer userId1, Integer userId2) {
-        if (!userStorage.users.containsKey(userId1)) {
+        if (!userStorage.storage.containsKey(userId1)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при удалении из друзей: пользователь c id = " + userId1 + " не найден");
         }
-        if (!userStorage.users.containsKey(userId2)) {
+        if (!userStorage.storage.containsKey(userId2)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при удалении из друзей: пользователь c id = " + userId2 + " не найден");
         }
-        userStorage.getById(userId1).deleteFriends(userId2);
-        userStorage.getById(userId2).deleteFriends(userId1);
+        if (friendStorage.containsFriendship(userId1, userId2, false)) {
+            friendStorage.removeFriendship(userId1, userId2);
+        } else if (friendStorage.containsFriendship(userId1, userId2, true)) {
+            friendStorage.updateFriendship(userId2, userId1, false, userId1, userId2);
+        } else if (friendStorage.containsFriendship(userId2, userId1, true)) {
+            friendStorage.updateFriendship(userId2, userId1, false, userId2, userId1);
+        }
+        User user = userStorage.getById(userId1);
+        friendStorage.loadFriends(user);
         return userStorage.getById(userId1);
     }
 
 
     public Collection<User> returnFriendCollection(Integer userId) {
-        if (!userStorage.users.containsKey(userId)) {
+        if (!userStorage.storage.containsKey(userId)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при поиске друзей: пользователь c id = " + userId + " не найден");
         }
@@ -100,11 +120,11 @@ public class UserService {
 
 
     public Collection<User> returnCommonFriends(Integer userId1, Integer userId2) {
-        if (!userStorage.users.containsKey(userId1)) {
+        if (!userStorage.storage.containsKey(userId1)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при поиске общих друзей: пользователь c id = " + userId1 + " не найден");
         }
-        if (!userStorage.users.containsKey(userId2)) {
+        if (!userStorage.storage.containsKey(userId2)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при поиске общих друзей: пользователь c id = " + userId2 + " не найден");
         }
@@ -121,7 +141,7 @@ public class UserService {
     }
 
 
-    public void validate(@Valid User user) throws ValidationException {
+    public void validate(@Valid User user)  {
         if (user.getLogin().contains(" ")) {
             log.error("В логине пользователя есть пробел");
             throw new ValidationException("Не пройдена валидация пользователя по логину: " + user.getLogin());
