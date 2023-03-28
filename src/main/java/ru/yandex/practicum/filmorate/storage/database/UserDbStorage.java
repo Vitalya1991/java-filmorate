@@ -1,10 +1,8 @@
 package ru.yandex.practicum.filmorate.storage.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.database.interfaces.UserDStorage;
@@ -16,6 +14,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Size
 @Component("UserDbStorage")
 public class UserDbStorage extends AbstractDbStorage<User> implements UserDStorage {
@@ -68,7 +67,6 @@ public class UserDbStorage extends AbstractDbStorage<User> implements UserDStora
         jdbcTemplate.update(sql, user.getId());
         return user;
     }
-
 
 
     @Override

@@ -50,7 +50,7 @@ public class FilmService {
         return getById(film.getId());
     }
 
-    public Film update(Film film)  {
+    public Film update(Film film) {
         validate(film);
         if (filmStorage.storage.containsKey(film.getId())) {
             filmStorage.replace(film);
@@ -142,6 +142,7 @@ public class FilmService {
     private int compare(Film first, Film last) {
         return Integer.compare(last.getUsersLikes().size(), first.getUsersLikes().size());
     }
+
     private void loadData(Film film) {
         likeStorage.loadLikes(film);
         genreStorage.loadGenre(film);

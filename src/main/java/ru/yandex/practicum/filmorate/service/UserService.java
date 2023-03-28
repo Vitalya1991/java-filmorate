@@ -22,14 +22,16 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserStorage userStorage;
     private final FriendStorage friendStorage;
+
     @Autowired
     public UserService(@Qualifier("UserDbStorage") UserDStorage userStorage,
-                       @Qualifier("FriendDbStorage")FriendStorage friendStorage) {
+                       @Qualifier("FriendDbStorage") FriendStorage friendStorage) {
         this.userStorage = userStorage;
-        this.friendStorage = friendStorage;}
+        this.friendStorage = friendStorage;
+    }
 
 
-    public User create(User user)  {
+    public User create(User user) {
         validate(user);
         userStorage.add(user);
         log.info("Пользователь добавлен в коллекцию");
@@ -43,8 +45,8 @@ public class UserService {
             userStorage.replace(user);
             return userStorage.getById(user.getId());
         }
-            log.error("Пользователь в коллекции не найден");
-            throw new UserNotFoundException("Ошибка при обновлении: пользователь c id = " + user.getId() + " не найден");
+        log.error("Пользователь в коллекции не найден");
+        throw new UserNotFoundException("Ошибка при обновлении: пользователь c id = " + user.getId() + " не найден");
     }
 
     public Collection<User> findAll() {
@@ -73,9 +75,10 @@ public class UserService {
         if (!userStorage.storage.containsKey(userId2)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при добавлении в друзья: пользователь c id = " + userId2 + " не найден");
-        }  if (friendStorage.containsFriendship(userId2, userId1, false)) {
+        }
+        if (friendStorage.containsFriendship(userId2, userId1, false)) {
             friendStorage.updateFriendship(userId2, userId1, true, userId2, userId1);
-        } else if (!friendStorage.containsFriendship(userId1, userId2, null)){
+        } else if (!friendStorage.containsFriendship(userId1, userId2, null)) {
             friendStorage.insertFriendship(userId1, userId2);
         }
         User user = userStorage.getById(userId1);
@@ -141,7 +144,7 @@ public class UserService {
     }
 
 
-    public void validate(@Valid User user)  {
+    public void validate(@Valid User user) {
         if (user.getLogin().contains(" ")) {
             log.error("В логине пользователя есть пробел");
             throw new ValidationException("Не пройдена валидация пользователя по логину: " + user.getLogin());

@@ -18,7 +18,7 @@ public class RatingController {
     private final RatingService ratingService;
 
     @Autowired
-    public RatingController (RatingService ratingService) {
+    public RatingController(RatingService ratingService) {
         this.ratingService = ratingService;
     }
 
@@ -30,4 +30,5 @@ public class RatingController {
     @GetMapping("/mpa/{id}")
     public Rating findRating(@PathVariable("id") Integer id) {
         return ratingService.getRatingById(id);
-    }}
+    }
+}

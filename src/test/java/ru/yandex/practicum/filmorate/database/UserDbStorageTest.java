@@ -31,8 +31,8 @@ class UserDbStorageTest {
         User expUser = getExpUser1();
         userStorage.add(expUser);
         User actUser = userStorage.getById(expUser.getId());
-        assertEquals(expUser.getId(),actUser.getId());
-        assertEquals(expUser.getName(),actUser.getName());
+        assertEquals(expUser.getId(), actUser.getId());
+        assertEquals(expUser.getName(), actUser.getName());
         assertEquals(expUser.getEmail(), actUser.getEmail());
         assertEquals(expUser.getLogin(), actUser.getLogin());
         assertEquals(expUser.getBirthday(), actUser.getBirthday());
@@ -72,12 +72,12 @@ class UserDbStorageTest {
     }
 
     @Test
-    void delete(){
+    void delete() {
         User user = getExpUser1();
         userStorage.add(user);
         userStorage.delete(user);
-        Collection <User> expected  = new ArrayList<>();
-        assertEquals(expected,userStorage.getValues());
+        Collection<User> expected = new ArrayList<>();
+        assertEquals(expected, userStorage.getValues());
     }
 
     private User getExpUser1() {

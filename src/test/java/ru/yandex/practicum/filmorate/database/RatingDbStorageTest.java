@@ -35,8 +35,8 @@ class RatingDbStorageTest {
         Rating expRating = getExpRating1((id1));
         gatingStorage.add(expRating);
         Rating actRating = gatingStorage.getById(expRating.getId());
-        assertEquals(expRating.getId(),actRating.getId());
-        assertEquals(expRating.getName(),actRating.getName());
+        assertEquals(expRating.getId(), actRating.getId());
+        assertEquals(expRating.getName(), actRating.getName());
     }
 
     @Test

@@ -1,4 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +10,7 @@ import ru.yandex.practicum.filmorate.storage.database.interfaces.GenreStorage;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class GenreService {
@@ -16,7 +18,7 @@ public class GenreService {
     private final GenreStorage genreStorage;
 
     @Autowired
-    public GenreService(@Qualifier("GenreDbStorage")GenreStorage genreStorage) {
+    public GenreService(@Qualifier("GenreDbStorage") GenreStorage genreStorage) {
         this.genreStorage = genreStorage;
     }
 
@@ -28,8 +30,7 @@ public class GenreService {
         if (!getIds().contains(id)) {
             log.error("Рейтинг в коллекции не найден");
             throw new GenreNotFoundException("Ошибка при поиске: жанр id = " + id + " не найден");
-        }
-        else {
+        } else {
             return genreStorage.getById(id);
         }
     }

@@ -40,7 +40,7 @@ class LikeDbStorageTest {
         Film film2 = getExpFilm2();
         film2.setId(1);
         likeStorage.loadLikes(film2);
-        assertEquals(film1.getUsersLikes(),film2.getUsersLikes());
+        assertEquals(film1.getUsersLikes(), film2.getUsersLikes());
     }
 
     @Test
@@ -52,7 +52,7 @@ class LikeDbStorageTest {
         film2.addUserLike(1);
         film2.setId(1);
         likeStorage.loadLikes(film2);
-        assertEquals(new HashSet<>(),film2.getUsersLikes());
+        assertEquals(new HashSet<>(), film2.getUsersLikes());
     }
 
     private Film getExpFilm1() {

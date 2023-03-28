@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -20,7 +19,7 @@ public class User {
     private int id;
     @NotBlank(message = "Email can not be blank")
     @Email(message = "Email is not valid")
-    private  String email;
+    private String email;
     @NotNull(message = "Login can not be null")
     @NotBlank(message = "Login can not be blank")
     private String login;
@@ -33,10 +32,12 @@ public class User {
     public void addFriends(int id) {
         this.friends.add(id);
     }
+
     public void deleteFriends(int id) {
         this.friends.remove(id);
     }
-    public boolean containsFriend(Integer id){
+
+    public boolean containsFriend(Integer id) {
         return friends.contains(id);
     }
 

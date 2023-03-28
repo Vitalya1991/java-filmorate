@@ -17,7 +17,7 @@ public class GenreContoller {
     private final GenreService genreService;
 
     @Autowired
-    public GenreContoller (GenreService genreService) {
+    public GenreContoller(GenreService genreService) {
         this.genreService = genreService;
     }
 
@@ -29,4 +29,5 @@ public class GenreContoller {
     @GetMapping("/genres/{id}")
     public Genre findGenre(@PathVariable("id") Integer id) {
         return genreService.getGenreById(id);
-    }}
+    }
+}

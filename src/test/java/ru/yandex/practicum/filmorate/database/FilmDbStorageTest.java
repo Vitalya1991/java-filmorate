@@ -34,12 +34,12 @@ class FilmDbStorageTest {
         Film expFilm = getExpFilm1();
         filmStorage.add(expFilm);
         Film actFilm = filmStorage.getById(expFilm.getId());
-        assertEquals(expFilm.getId(),actFilm.getId());
-        assertEquals(expFilm.getName(),actFilm.getName());
-        assertEquals(expFilm.getDescription(),actFilm.getDescription());
-        assertEquals(expFilm.getReleaseDate(),actFilm.getReleaseDate());
-        assertEquals(expFilm.getDuration(),actFilm.getDuration());
-        assertEquals(expFilm.getMpa().getId(),actFilm.getMpa().getId());
+        assertEquals(expFilm.getId(), actFilm.getId());
+        assertEquals(expFilm.getName(), actFilm.getName());
+        assertEquals(expFilm.getDescription(), actFilm.getDescription());
+        assertEquals(expFilm.getReleaseDate(), actFilm.getReleaseDate());
+        assertEquals(expFilm.getDuration(), actFilm.getDuration());
+        assertEquals(expFilm.getMpa().getId(), actFilm.getMpa().getId());
     }
 
     @Test
@@ -75,12 +75,12 @@ class FilmDbStorageTest {
     }
 
     @Test
-    void delete(){
+    void delete() {
         Film film1 = getExpFilm1();
         filmStorage.add(film1);
         filmStorage.delete(film1);
-        Collection <Film> expected = new ArrayList<>();
-        assertEquals(expected,filmStorage.getValues());
+        Collection<Film> expected = new ArrayList<>();
+        assertEquals(expected, filmStorage.getValues());
     }
 
     private Film getExpFilm1() {

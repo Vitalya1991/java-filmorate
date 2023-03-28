@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 @Component("InMemoryFilmStorage")
 public class InMemoryFilmStorage extends AbstractInMemoryStorage<Film> implements FilmStorage {
     private int id = 1;
+
     @Override
     public Film add(Film film) {
         film.setId(id);
@@ -21,7 +22,7 @@ public class InMemoryFilmStorage extends AbstractInMemoryStorage<Film> implement
     @Override
     public Film replace(Film film) {
         storage.replace(film.getId(), film);
-       return film;
+        return film;
     }
 
     @Override

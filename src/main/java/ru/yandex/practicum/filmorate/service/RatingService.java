@@ -1,4 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +10,7 @@ import ru.yandex.practicum.filmorate.storage.database.interfaces.RatingStorage;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class RatingService {
@@ -16,7 +18,7 @@ public class RatingService {
     private final RatingStorage ratingStorage;
 
     @Autowired
-    public RatingService(@Qualifier("RatingDbStorage")RatingStorage ratingStorage) {
+    public RatingService(@Qualifier("RatingDbStorage") RatingStorage ratingStorage) {
         this.ratingStorage = ratingStorage;
     }
 
@@ -28,8 +30,7 @@ public class RatingService {
         if (!getIds().contains(id)) {
             log.error("Рейтинг в коллекции не найден");
             throw new RatingNotFoundException("Ошибка при поиске: рейтинг id = " + id + " не найден");
-        }
-        else {
+        } else {
             return ratingStorage.getById(id);
         }
     }

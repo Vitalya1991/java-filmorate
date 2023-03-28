@@ -43,8 +43,8 @@ class GenreDbStorageTest {
         Genre expGenre = getExpGenre1((id1));
         genreStorage.add(expGenre);
         Genre actGenre = genreStorage.getById(expGenre.getId());
-        assertEquals(expGenre.getId(),actGenre.getId());
-        assertEquals(expGenre.getName(),actGenre.getName());
+        assertEquals(expGenre.getId(), actGenre.getId());
+        assertEquals(expGenre.getName(), actGenre.getName());
     }
 
     @Test
@@ -83,12 +83,13 @@ class GenreDbStorageTest {
         List<Genre> actGenres = new ArrayList<>(genreStorage.getValues());
         int i1 = actGenres.size() - 2;
         int i2 = actGenres.size() - 1;
-        assertEquals(expGenre1,  actGenres.get(i1));
+        assertEquals(expGenre1, actGenres.get(i1));
         assertEquals(expGenre2, actGenres.get(i2));
         assertEquals(countRec, actGenres.size());
     }
+
     @Test
-    void saveGenre(){
+    void saveGenre() {
         Film film1 = getExpFilm1();
         filmStorage.add(film1);
         genreStorage.saveGenre(film1);
@@ -96,27 +97,27 @@ class GenreDbStorageTest {
         film2.setId(1);
         genreStorage.loadGenre(film2);
         Set<Genre> genres = film2.getGenres();
-        assertTrue(genres.contains(new Genre(1,"Комедия")));
-        assertTrue(genres.contains(new Genre(2,"Драма")));
+        assertTrue(genres.contains(new Genre(1, "Комедия")));
+        assertTrue(genres.contains(new Genre(2, "Драма")));
     }
 
     @Test
-    void loadGenre(){
+    void loadGenre() {
         Film film2 = getExpFilm2();
         filmStorage.add(film2);
         Film film1 = getExpFilm1();
         film1.setId(1);
         genreStorage.loadGenre(film2);
-        assertEquals(new HashSet<>(),film2.getGenres());
+        assertEquals(new HashSet<>(), film2.getGenres());
     }
 
     @Test
-    void deleteGenre(){
+    void deleteGenre() {
         Film film = getExpFilm1();
         filmStorage.add(film);
         genreStorage.saveGenre(film);
         genreStorage.deleteGenre(film);
-        assertEquals(new HashSet<>(),filmStorage.getById(1).getGenres());
+        assertEquals(new HashSet<>(), filmStorage.getById(1).getGenres());
     }
 
 

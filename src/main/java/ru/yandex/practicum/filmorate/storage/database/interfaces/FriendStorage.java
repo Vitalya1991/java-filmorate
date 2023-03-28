@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.storage.database.interfaces;
 
 import ru.yandex.practicum.filmorate.model.User;
 
-public interface FriendStorage  {
+public interface FriendStorage {
 
     void insertFriendship(Integer id, Integer friendId);
 

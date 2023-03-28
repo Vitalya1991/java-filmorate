@@ -4,8 +4,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component("InMemoryUserStorage")
@@ -25,7 +23,8 @@ public class InMemoryUserStorage extends AbstractInMemoryStorage<User> implement
     public User replace(User user) {
 
         storage.replace(user.getId(), user);
-        return user;}
+        return user;
+    }
 
     @Override
     public User delete(User user) {
