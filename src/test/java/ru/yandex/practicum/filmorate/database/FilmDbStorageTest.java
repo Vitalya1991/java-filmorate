@@ -12,7 +12,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.storage.database.interfaces.FilmDStorage;
-import ru.yandex.practicum.filmorate.storage.database.interfaces.UserDStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class FilmDbStorageTest {
     private final FilmDStorage filmStorage;
-    private final UserDStorage userStorage;
 
     @Test
     void add() {
