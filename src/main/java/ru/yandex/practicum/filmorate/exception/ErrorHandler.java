@@ -39,4 +39,21 @@ public class ErrorHandler {
                 "Ошибка", e.getMessage()
         );
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle(final GenreNotFoundException e) {
+        return new ErrorResponse(
+                "Жанр не найден", e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle(final RatingNotFoundException e) {
+        return new ErrorResponse(
+                "Рейтинг не найден", e.getMessage()
+        );
+    }
+
 }

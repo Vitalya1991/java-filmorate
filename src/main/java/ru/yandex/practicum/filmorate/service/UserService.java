@@ -41,7 +41,7 @@ public class UserService {
 
     public User update(User user) {
         validate(user);
-        if (userStorage.storage.containsKey(user.getId())) {
+        if (getIds().contains(user.getId())) {
             userStorage.replace(user);
             return userStorage.getById(user.getId());
         }
@@ -57,7 +57,7 @@ public class UserService {
     }
 
     public User getById(Integer userId) {
-        if (userStorage.storage.containsKey(userId)) {
+        if (getIds().contains(userId)) {
             User user = userStorage.getById(userId);
             friendStorage.loadFriends(user);
             return user;
@@ -68,11 +68,11 @@ public class UserService {
 
 
     public User addFriend(Integer userId1, Integer userId2) {
-        if (!userStorage.storage.containsKey(userId1)) {
+        if (!getIds().contains(userId1)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при добавлении в друзья: пользователь c id = " + userId1 + " не найден");
         }
-        if (!userStorage.storage.containsKey(userId2)) {
+        if (!getIds().contains(userId2)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при добавлении в друзья: пользователь c id = " + userId2 + " не найден");
         }
@@ -88,11 +88,11 @@ public class UserService {
 
 
     public User deleteFriend(Integer userId1, Integer userId2) {
-        if (!userStorage.storage.containsKey(userId1)) {
+        if (!getIds().contains(userId1)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при удалении из друзей: пользователь c id = " + userId1 + " не найден");
         }
-        if (!userStorage.storage.containsKey(userId2)) {
+        if (!getIds().contains(userId2)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при удалении из друзей: пользователь c id = " + userId2 + " не найден");
         }
@@ -110,11 +110,13 @@ public class UserService {
 
 
     public Collection<User> returnFriendCollection(Integer userId) {
-        if (!userStorage.storage.containsKey(userId)) {
+        if (!getIds().contains(userId)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при поиске друзей: пользователь c id = " + userId + " не найден");
         }
-        Set<Integer> temp = userStorage.getById(userId).getFriends();
+        User user = userStorage.getById(userId);
+        friendStorage.loadFriends(user);
+        Set<Integer> temp = user.getFriends();
         return userStorage.getValues().stream()
                 .filter(x -> temp.contains(x.getId()))
                 .sorted(this::compare)
@@ -123,17 +125,21 @@ public class UserService {
 
 
     public Collection<User> returnCommonFriends(Integer userId1, Integer userId2) {
-        if (!userStorage.storage.containsKey(userId1)) {
+        if (!getIds().contains(userId1)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при поиске общих друзей: пользователь c id = " + userId1 + " не найден");
         }
-        if (!userStorage.storage.containsKey(userId2)) {
+        if (!getIds().contains(userId2)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при поиске общих друзей: пользователь c id = " + userId2 + " не найден");
         }
-        Set<Integer> temp = userStorage.getById(userId1).getFriends()
+        User user1 = userStorage.getById(userId1);
+        friendStorage.loadFriends(user1);
+        User user2 = userStorage.getById(userId2);
+        friendStorage.loadFriends(user2);
+        Set<Integer> temp =  user1.getFriends()
                 .stream()
-                .filter(userStorage.getById(userId2).getFriends()::contains)
+                .filter(user2.getFriends()::contains)
                 .collect(Collectors.toSet());
 
         return userStorage.getValues().stream()

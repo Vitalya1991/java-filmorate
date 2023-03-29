@@ -5,12 +5,14 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component("InMemoryFilmStorage")
 public class InMemoryFilmStorage extends AbstractInMemoryStorage<Film> implements FilmStorage {
     private int id = 1;
-
+    Map<Integer, Film> storage = new HashMap<>();
     @Override
     public Film add(Film film) {
         film.setId(id);

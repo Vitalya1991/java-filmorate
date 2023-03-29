@@ -27,12 +27,11 @@ public class RatingService {
     }
 
     public Rating getRatingById(Integer id) {
-        if (!getIds().contains(id)) {
-            log.error("Рейтинг в коллекции не найден");
-            throw new RatingNotFoundException("Ошибка при поиске: рейтинг id = " + id + " не найден");
-        } else {
+        if (getIds().contains(id)) {
             return ratingStorage.getById(id);
         }
+        log.error("Рейтинг в коллекции не найден");
+        throw new RatingNotFoundException("Ошибка при поиске: рейтинг id = " + id + " не найден");
     }
 
     private Collection<Integer> getIds() {

@@ -52,7 +52,7 @@ public class FilmService {
 
     public Film update(Film film) {
         validate(film);
-        if (filmStorage.storage.containsKey(film.getId())) {
+        if (getIds().contains(film.getId())) {
             filmStorage.replace(film);
             likeStorage.saveLikes(film);
             genreStorage.saveGenre(film);
@@ -69,7 +69,7 @@ public class FilmService {
     }
 
     public Film getById(Integer filmId) {
-        if (!filmStorage.storage.containsKey(filmId)) {
+        if (!getIds().contains(filmId)) {
             log.error("Фильм в коллекции не найден");
             throw new FilmNotFoundException("Ошибка при поиске: фильм id = " + filmId + " не найден");
         }
@@ -80,11 +80,11 @@ public class FilmService {
 
 
     public Film addUserLike(int filmId, int userId) {
-        if (!filmStorage.storage.containsKey(filmId)) {
+        if (!getIds().contains(userId)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при добавлении лайка: пользователь c id = " + userId + " не найден");
         }
-        if (!getUsersIds().contains(userId)) {
+        if (!getUsersIds().contains(filmId)) {
             log.error("Фильм в коллекции не найден");
             throw new FilmNotFoundException("Ошибка при добавлении лайка: фильм c id = " + filmId + " не найден");
         }
@@ -96,11 +96,11 @@ public class FilmService {
 
 
     public Film deleteUserLike(int filmId, int userId) {
-        if (!filmStorage.storage.containsKey(filmId)) {
+        if (!getIds().contains(filmId)) {
             log.error("Фильм в коллекции не найден");
             throw new FilmNotFoundException("Ошибка при удалении лайка: фильм c id = " + filmId + " не найден");
         }
-        if (!userStorage.storage.containsKey(userId)) {
+        if (!getIds().contains(userId)) {
             log.error("Пользователь в коллекции не найден");
             throw new UserNotFoundException("Ошибка при удалении лайка: пользователь c id = " + userId + " не найден");
         }

@@ -27,13 +27,13 @@ public class GenreService {
     }
 
     public Genre getGenreById(Integer id) {
-        if (!getIds().contains(id)) {
-            log.error("Рейтинг в коллекции не найден");
-            throw new GenreNotFoundException("Ошибка при поиске: жанр id = " + id + " не найден");
-        } else {
+        if (getIds().contains(id)) {
             return genreStorage.getById(id);
         }
+        log.error("Рейтинг в коллекции не найден");
+        throw new GenreNotFoundException("Ошибка при поиске: жанр id = " + id + " не найден");
     }
+
 
     private Collection<Integer> getIds() {
         return genreStorage.getValues().stream()

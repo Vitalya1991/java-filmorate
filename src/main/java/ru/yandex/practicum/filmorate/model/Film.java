@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +31,6 @@ public class Film {
     private int duration;
     private Rating mpa;
     private Set<Genre> genres = new TreeSet<>(Comparator.comparing(Genre::getId));
-
-    @JsonIgnore
-    public Set<Integer> getUsersLikes() {
-        return usersLikes;
-    }
 
     @Setter(AccessLevel.NONE)
     private Set<Integer> usersLikes = new HashSet<>();

@@ -4,16 +4,18 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component("InMemoryUserStorage")
 public class InMemoryUserStorage extends AbstractInMemoryStorage<User> implements UserStorage {
     private int id = 1;
+    Map<Integer, User> storage = new HashMap<>();
 
     @Override
     public User add(User user) {
         user.setId(id);
-
         storage.put(id, user);
         id++;
         return user;
@@ -21,7 +23,6 @@ public class InMemoryUserStorage extends AbstractInMemoryStorage<User> implement
 
     @Override
     public User replace(User user) {
-
         storage.replace(user.getId(), user);
         return user;
     }
