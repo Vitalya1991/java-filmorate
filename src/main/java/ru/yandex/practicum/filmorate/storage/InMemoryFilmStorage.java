@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class InMemoryFilmStorage extends AbstractInMemoryStorage<Film> implements FilmStorage {
     private int id = 1;
     Map<Integer, Film> storage = new HashMap<>();
+
     @Override
     public Film add(Film film) {
         film.setId(id);
