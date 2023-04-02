@@ -22,9 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class UserDbStorageTest {
-    private final UserDStorage userStorage;
-    private static final String EMAIL1 = "user1@ya.ru";
-    private static final String EMAIL2 = "user2@ya.ru";
+    final UserDStorage userStorage;
+    final String EMAIL1 = "user1@ya.ru";
+    final String EMAIL2 = "user2@ya.ru";
 
     @Test
     void add() {
@@ -80,7 +80,7 @@ class UserDbStorageTest {
         assertEquals(expected, userStorage.getValues());
     }
 
-    private User getExpUser1() {
+    User getExpUser1() {
         User user = new User();
         user.setEmail(EMAIL1);
         user.setLogin("usr1");
@@ -89,7 +89,7 @@ class UserDbStorageTest {
         return user;
     }
 
-    private User getExpUser2() {
+    User getExpUser2() {
         User user = new User();
         user.setEmail(EMAIL2);
         user.setLogin("usr2");

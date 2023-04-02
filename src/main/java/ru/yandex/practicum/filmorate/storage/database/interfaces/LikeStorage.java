@@ -4,7 +4,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 public interface LikeStorage {
 
-    void saveLikes(Film film);
+    int[] saveLikes(Film film);
 
     void loadLikes(Film film);
 }

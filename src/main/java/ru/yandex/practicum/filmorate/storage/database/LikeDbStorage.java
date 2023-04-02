@@ -2,17 +2,19 @@ package ru.yandex.practicum.filmorate.storage.database;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.database.interfaces.LikeStorage;
 
-import java.util.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 @Component("LikeDbStorage")
 public class LikeDbStorage implements LikeStorage {
-    private final JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     public LikeDbStorage(JdbcTemplate jdbcTemplate) {
@@ -20,14 +22,20 @@ public class LikeDbStorage implements LikeStorage {
     }
 
     @Override
-    public void saveLikes(Film film) {
-        jdbcTemplate.update("DELETE FROM FILMS_LIKES WHERE FILM_ID = ?", film.getId());
+    public int[] saveLikes(Film film) {
+        int[] likes = jdbcTemplate.batchUpdate(
+                "INSERT INTO FILMS_LIKES (FILM_ID, USER_ID) VALUES(?, ?)",
+                new BatchPreparedStatementSetter() {
+                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                        ps.setInt(1, film.getId());
+                        ps.setInt(2, film.getLikesCount());
+                    }
 
-        String sql = "INSERT INTO FILMS_LIKES (FILM_ID, USER_ID) VALUES(?, ?)";
-        Set<Integer> likes = film.getUsersLikes();
-        for (var like : likes) {
-            jdbcTemplate.update(sql, film.getId(), like);
-        }
+                    public int getBatchSize() {
+                        return film.getLikesCount();
+                    }
+                });
+        return likes;
     }
 
     @Override

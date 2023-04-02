@@ -76,7 +76,10 @@ public class UserDbStorage extends AbstractDbStorage<User> implements UserDStora
         if (result.isEmpty()) {
             return null;
         }
-        return result.get(0);
+        return jdbcTemplate.query("SELECT * FROM USERS WHERE USER_ID = ?", this::mapToUser, id)
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

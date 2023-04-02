@@ -34,7 +34,6 @@ public class GenreService {
         throw new GenreNotFoundException("Ошибка при поиске: жанр id = " + id + " не найден");
     }
 
-
     private Collection<Integer> getIds() {
         return genreStorage.getValues().stream()
                 .map(Genre::getId)

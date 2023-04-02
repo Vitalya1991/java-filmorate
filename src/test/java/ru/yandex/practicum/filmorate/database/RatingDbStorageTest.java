@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class RatingDbStorageTest {
-    private final RatingStorage gatingStorage;
-    private int countRec;   //Так как в таблице уже есть начальные данные
+    final RatingStorage gatingStorage;
+    int countRec;   //Так как в таблице уже есть начальные данные
 
     @BeforeEach
     void setUp() {
@@ -78,14 +78,14 @@ class RatingDbStorageTest {
         assertEquals(countRec, actRatings.size());
     }
 
-    private Rating getExpRating1(Integer id) {
+    Rating getExpRating1(Integer id) {
         Rating gating = new Rating();
         gating.setId(id);
         gating.setName("Rating1");
         return gating;
     }
 
-    private Rating getExpRating2(Integer id) {
+    Rating getExpRating2(Integer id) {
         Rating gating = new Rating();
         gating.setId(id);
         gating.setName("Rating2");

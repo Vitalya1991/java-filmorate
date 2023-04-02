@@ -30,10 +30,10 @@ public class Film {
     @Positive(message = "Duration of the film can not be negative or zero")
     private int duration;
     private Rating mpa;
-    private Set<Genre> genres = new TreeSet<>(Comparator.comparing(Genre::getId));
+    public Set<Genre> genres = new TreeSet<>(Comparator.comparing(Genre::getId));
 
     @Setter(AccessLevel.NONE)
-    private Set<Integer> usersLikes = new HashSet<>();
+    public Set<Integer> usersLikes = new HashSet<>();
 
     public void addUserLike(int userId) {
         this.usersLikes.add(userId);
@@ -46,7 +46,6 @@ public class Film {
     public void addGenre(Genre genre) {
         genres.add(genre);
     }
-
     public void clearGenre() {
         genres = new TreeSet<>(Comparator.comparing(Genre::getId));
     }
@@ -58,14 +57,12 @@ public class Film {
     public int getLikesCount() {
         return usersLikes.size();
     }
-
     private int compare(Genre first, Genre last) {
         return Integer.compare(first.getId(), last.getId());
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
-
 
 }

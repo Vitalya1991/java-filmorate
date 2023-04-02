@@ -62,7 +62,10 @@ public class GenreDbStorage extends AbstractDbStorage<Genre> implements GenreSto
         if (result.isEmpty()) {
             return null;
         }
-        return result.get(0);
+        return jdbcTemplate.query("SELECT * FROM GENRES WHERE GENRE_ID = ?", this::mapToGenre, id)
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

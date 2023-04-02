@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = FilmorateApplication.class)
 class ValidationTests {
 
-    private JdbcTemplate jdbcTemplate;
-    private static final String LOGIN = "dolore ullamco";
+    JdbcTemplate jdbcTemplate;
+    final String LOGIN = "dolore ullamco";
 
     UserService userService = new UserService(new UserDbStorage(jdbcTemplate),
             new FriendDbStorage(jdbcTemplate));
@@ -28,7 +28,7 @@ class ValidationTests {
     }
 
     @Test
-    public void userValidateLoginTest() throws ValidationException {
+    void userValidateLoginTest() throws ValidationException {
         User user = new User();
         user.setEmail("mail@mail.ru");
         user.setLogin(LOGIN);
@@ -38,7 +38,7 @@ class ValidationTests {
     }
 
     @Test
-    public void userValidateNameTest() throws ValidationException {
+    void userValidateNameTest() throws ValidationException {
         User user = new User();
         user.setEmail("mail@mail.ru");
         user.setLogin("User1");
