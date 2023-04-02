@@ -23,4 +23,5 @@ public class FilmValidator {
             throw new ValidationException("Duration must be a positive");
         }
         return true;
-}}
+    }
+}

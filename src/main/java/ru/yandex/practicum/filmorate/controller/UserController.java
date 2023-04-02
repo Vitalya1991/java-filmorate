@@ -19,12 +19,12 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController (UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody User user) throws  ValidationException{
+    public User create(@Valid @RequestBody User user) throws ValidationException {
         return userService.create(user);
     }
 
@@ -45,12 +45,12 @@ public class UserController {
 
     @PutMapping("/{id}/friends/{friendId}")
     public User addFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) throws UserNotFoundException {
-        return userService.addFriend(id,friendId);
+        return userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
     public User deleteFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) throws UserNotFoundException {
-        return userService.deleteFriend(id,friendId);
+        return userService.deleteFriend(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
@@ -60,6 +60,6 @@ public class UserController {
 
     @GetMapping("/{id}/friends/common/{otherId}")
     public Collection<User> findUsersCommonFriends(@PathVariable("id") Integer id, @PathVariable("otherId") Integer otherId) throws UserNotFoundException {
-        return userService.returnCommonFriends(id,otherId);
+        return userService.returnCommonFriends(id, otherId);
     }
 }
