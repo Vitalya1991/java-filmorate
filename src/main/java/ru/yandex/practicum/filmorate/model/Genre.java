@@ -14,13 +14,16 @@ public class Genre {
         this.id = id;
         this.name = name;
     }
+
     public Genre(Integer id) {
         this.id = id;
         this.name = "";
     }
+
     public Genre() {
         this.name = "";
     }
+
     public int getId() {
         return id;
     }
