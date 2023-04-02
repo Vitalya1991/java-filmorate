@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class UserDbStorageTest {
     final UserDStorage userStorage;
-    final String EMAIL1 = "user1@ya.ru";
-    final String EMAIL2 = "user2@ya.ru";
+    final String email1 = "user1@ya.ru";
+    final String email2 = "user2@ya.ru";
 
     @Test
     void add() {
@@ -82,7 +82,7 @@ class UserDbStorageTest {
 
     User getExpUser1() {
         User user = new User();
-        user.setEmail(EMAIL1);
+        user.setEmail(email1);
         user.setLogin("usr1");
         user.setName("User1");
         user.setBirthday(LocalDate.of(1987, 10, 1));
@@ -91,7 +91,7 @@ class UserDbStorageTest {
 
     User getExpUser2() {
         User user = new User();
-        user.setEmail(EMAIL2);
+        user.setEmail(email2);
         user.setLogin("usr2");
         user.setName("User2");
         user.setBirthday(LocalDate.of(1990, 5, 6));

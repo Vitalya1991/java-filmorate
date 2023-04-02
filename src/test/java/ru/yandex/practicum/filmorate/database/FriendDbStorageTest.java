@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class FriendDbStorageTest {
-    private static final String EMAIL1 = "user1@ya.ru";
-    private static final String EMAIL2 = "user2@ya.ru";
+    private static final String email1 = "user1@ya.ru";
+    private static final String email2 = "user2@ya.ru";
     private final UserDStorage userStorage;
     private final FriendStorage friendStorage;
 
@@ -115,7 +115,7 @@ class FriendDbStorageTest {
 
     private User getExpUser1() {
         User user = new User();
-        user.setEmail(EMAIL1);
+        user.setEmail(email1);
         user.setLogin("usr1");
         user.setName("User1");
         user.setBirthday(LocalDate.of(1987, 10, 1));
@@ -124,7 +124,7 @@ class FriendDbStorageTest {
 
     private User getExpUser2() {
         User user = new User();
-        user.setEmail(EMAIL2);
+        user.setEmail(email2);
         user.setLogin("usr2");
         user.setName("User2");
         user.setBirthday(LocalDate.of(1990, 5, 6));
