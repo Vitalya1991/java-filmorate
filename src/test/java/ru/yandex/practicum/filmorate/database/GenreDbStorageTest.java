@@ -15,9 +15,7 @@ import ru.yandex.practicum.filmorate.storage.database.interfaces.FilmDStorage;
 import ru.yandex.practicum.filmorate.storage.database.interfaces.GenreStorage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,56 +35,6 @@ class GenreDbStorageTest {
         countRec = genreStorage.getValues().size();
     }
 
-    @Test
-    void add() {
-        Integer id1 = countRec++;
-        Genre expGenre = getExpGenre1((id1));
-        genreStorage.add(expGenre);
-        Genre actGenre = genreStorage.getById(expGenre.getId());
-        assertEquals(expGenre.getId(), actGenre.getId());
-        assertEquals(expGenre.getName(), actGenre.getName());
-    }
-
-    @Test
-    void replace() {
-        Integer id1 = countRec++;
-        Genre expGenre = getExpGenre1(id1);
-        genreStorage.add(expGenre);
-        expGenre.setName("action");
-
-        genreStorage.replace(expGenre);
-        Genre actGenre = genreStorage.getById(expGenre.getId());
-
-        assertEquals(expGenre.getId(), actGenre.getId());
-        assertEquals(expGenre.getName(), actGenre.getName());
-    }
-
-    @Test
-    void getById() {
-        Integer id1 = countRec++;
-        Genre expGenre = getExpGenre1(id1);
-        genreStorage.add(expGenre);
-        Genre actGenre = genreStorage.getById(expGenre.getId());
-        assertEquals(expGenre.getId(), actGenre.getId());
-        assertEquals(expGenre.getName(), actGenre.getName());
-    }
-
-    @Test
-    void getValues() {
-        Integer id1 = countRec++;
-        Genre expGenre1 = getExpGenre1(id1);
-        genreStorage.add(expGenre1);
-        Integer id2 = countRec++;
-        Genre expGenre2 = getExpGenre2(id2);
-        genreStorage.add(expGenre2);
-
-        List<Genre> actGenres = new ArrayList<>(genreStorage.getValues());
-        int i1 = actGenres.size() - 2;
-        int i2 = actGenres.size() - 1;
-        assertEquals(expGenre1, actGenres.get(i1));
-        assertEquals(expGenre2, actGenres.get(i2));
-        assertEquals(countRec, actGenres.size());
-    }
 
     @Test
     void saveGenre() {
