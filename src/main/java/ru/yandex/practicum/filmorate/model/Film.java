@@ -46,6 +46,7 @@ public class Film {
     public void addGenre(Genre genre) {
         genres.add(genre);
     }
+
     public void clearGenre() {
         genres = new TreeSet<>(Comparator.comparing(Genre::getId));
     }
@@ -57,6 +58,7 @@ public class Film {
     public int getLikesCount() {
         return usersLikes.size();
     }
+
     private int compare(Genre first, Genre last) {
         return Integer.compare(first.getId(), last.getId());
     }
